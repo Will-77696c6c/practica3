@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Seminarios</title>
+    <style>
+        /* Estilo general */
+        body {
+            font-family: 'Arial', sans-serif; /* Fuente moderna */
+            background-color: #e0f7fa; /* Fondo claro */
+            color: #000; /* Texto negro */
+            line-height: 1.6; /* Espaciado entre líneas */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #1e88e5; /* Azul brillante para el título */
+            text-align: center; /* Centrar el título */
+            text-shadow: 2px 2px 5px rgba(30, 136, 229, 0.5); /* Sombra azul */
+        }
+
+        .container {
+            display: flex; /* Usar flexbox para la disposición */
+            justify-content: space-between; /* Espaciado entre columnas */
+            max-width: 800px; /* Ancho máximo del contenedor */
+            margin: 0 auto; /* Centrar contenedor */
+            padding: 20px; /* Espaciado interno */
+            background-color: #ffffff; /* Fondo blanco */
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 0 10px rgba(30, 136, 229, 0.5); /* Sombra suave */
+        }
+
+        .form-section {
+            flex: 1; /* Toma el mismo espacio que el cuadro de seminarios */
+            padding: 10px; /* Espaciado interno */
+            border: 2px double #1e88e5; /* Borde doble azul */
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: #f0f4f8; /* Fondo claro */
+        }
+
+        .seminar-section {
+            flex: 1; /* Toma el mismo espacio que el formulario */
+            padding: 10px; /* Espaciado interno */
+            border: 2px double #1e88e5; /* Borde doble azul */
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: #f0f4f8; /* Fondo claro */
+            margin-left: 20px; /* Espacio a la izquierda */
+        }
+
+        label {
+            display: block; /* Mostrar etiquetas como bloques */
+            margin: 10px 0 5px; /* Margen para las etiquetas */
+            color: #1e88e5; /* Color azul para etiquetas */
+        }
+
+        .turno-container {
+            display: flex; /* Usar flexbox para alinear turnos */
+            justify-content: space-between; /* Espaciado entre elementos */
+            align-items: center; /* Alinear verticalmente */
+        }
+
+        .turno-label {
+            flex: 1; /* Tomar el mismo espacio */
+            text-align: center; /* Centrar texto */
+        }
+
+        input[type="text"], input[type="date"], input[type="radio"], input[type="checkbox"] {
+            width: calc(100% - 20px); /* Ancho completo menos el padding */
+            padding: 10px; /* Espaciado interno */
+            margin-bottom: 10px; /* Espaciado inferior */
+            border: 2px solid #1e88e5; /* Borde azul */
+            border-radius: 5px; /* Bordes redondeados */
+            background-color: #ffffff; /* Fondo blanco */
+            color: #000; /* Texto negro */
+        }
+
+        button {
+            background-color: #1e88e5; /* Color de fondo del botón */
+            color: #ffffff; /* Color del texto del botón */
+            border: none; /* Sin borde */
+            padding: 10px 15px; /* Espaciado interno */
+            cursor: pointer; /* Cambiar cursor al pasar por encima */
+            font-size: 16px; /* Tamaño de fuente */
+            transition: background-color 0.3s; /* Efecto de transición */
+            display: block; /* Hacer que el botón ocupe el ancho completo */
+            margin: 20px auto; /* Centrar el botón */
+            border-radius: 5px; /* Bordes redondeados */
+            box-shadow: 0 0 5px rgba(30, 136, 229, 0.5); /* Sombra */
+        }
+
+        button:hover {
+            background-color: #0d47a1; /* Color más oscuro al pasar el ratón */
+        }
+
+        .seminar-list {
+            background-color: #ffffff; /* Fondo para la lista de seminarios */
+            padding: 10px; /* Espaciado interno */
+            border-radius: 5px; /* Bordes redondeados */
+            border: 2px double #1e88e5; /* Borde doble azul */
+            box-shadow: 0 0 10px rgba(30, 136, 229, 0.5); /* Sombra */
+        }
+
+        .seminar-list label {
+            color: #000; /* Texto negro para la lista */
+            display: flex; /* Usar flexbox para alinear checkbox y texto */
+            align-items: center; /* Alinear verticalmente */
+        }
+
+        .seminar-list input {
+            margin-right: 5px; /* Espaciado entre checkbox y texto */
+        }
+    </style>
+</head>
+<body>
+    <h1>Registro de Seminarios</h1>
+    <form action="/registrar" method="POST">
+    <div class="container">
+        <div class="form-section">
+           
+                <label>Fecha:</label>
+                <input type="date" name="fecha" required>
+
+                <label>Nombre:</label>
+                <input type="text" name="nombre" required>
+
+                <label>Apellidos:</label>
+                <input type="text" name="apellidos" required>
+
+                <label>Turno:</label>
+                <div class="turno-container">
+                    <div class="turno-label">Mañana</div>
+                    <div class="turno-label">Tarde</div>
+                    <div class="turno-label">Noche</div>
+                </div>
+                <div class="turno-container">
+                    <div class="turno-label"><input type="radio" name="turno" value="mañana" required></div>
+                    <div class="turno-label"><input type="radio" name="turno" value="tarde"></div>
+                    <div class="turno-label"><input type="radio" name="turno" value="noche"></div>
+                </div>
+
+
+
+                <button type="submit">Enviar Registro</button>
+           
+        </div>
+
+
+        <div class="seminar-section">
+            <label>Seminarios disponibles:</label>
+            <div class="seminar-list">
+                <label><input type="checkbox" name="seminarios" value="Inteligencia Artificial"> Inteligencia Artificial</label>
+                <label><input type="checkbox" name="seminarios" value="Machine Learning"> Machine Learning</label>
+                <label><input type="checkbox" name="seminarios" value="Simulación con Arena"> Simulación con Arena</label>
+                <label><input type="checkbox" name="seminarios" value="Robótica Educativa"> Robótica Educativa</label>
+            </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Inscritos</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace; /* Fuente de estilo gamer */
+            background-color: #b7d0ff; /* Fondo oscuro */
+            color: #1e88e5; /* Texto azul */
+        }
+
+        h1 {
+            color: #00bfff; /* Azul neón para el título */
+            text-align: center; /* Centrar título */
+            text-shadow: 2px 2px 5px rgba(0, 191, 255, 0.7); /* Sombra brillante */
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #0a0a0a; /* Fondo de la tabla oscuro */
+            color: #ffffff; /* Texto blanco */
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #1e88e5; /* Bordes azules */
+            text-align: center;
+        }
+
+        th {
+            background-color: #001f3f; /* Fondo azul oscuro */
+        }
+
+        td {
+            background-color: #001f3f; /* Fondo azul oscuro */
+        }
+
+        a {
+            color: #00bfff; /* Enlaces en color neón */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #1e88e5; /* Botón de fondo azul */
+            color: #ffffff; /* Texto blanco */
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            display: block;
+        }
+
+        button:hover {
+            background-color: #005cb2; /* Cambio de color al pasar el ratón */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); /* Fondo semi-transparente */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #001f3f; /* Fondo oscuro para el modal */
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #1e88e5;
+            width: 80%;
+            color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #1e88e5; /* Sombra azul brillante */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input[type="text"], input[type="date"], input[type="radio"], input[type="checkbox"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #1e88e5;
+            border-radius: 5px;
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            width: auto;
+        }
+
+        span {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Listado de Inscritos</h1>
+    <a href="/">Nuevo Dato</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Turno</th>
+                <th>Seminario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inscrito in inscritos %}
+            <tr>
+                <td>{{ inscrito['id'] }}</td>
+                <td>{{ inscrito['fecha'] }}</td>
+                <td>{{ inscrito['nombre'] }}</td>
+                <td>{{ inscrito['apellidos'] }}</td>
+                <td>{{ inscrito['turno'] }}</td>
+                <td>{{ inscrito['seminarios'] }}</td>
+                <td>
+                    <a href="#" onclick="showEditModal({{ inscrito['id'] }}, '{{ inscrito['fecha'] }}', '{{ inscrito['nombre'] }}', '{{ inscrito['apellidos'] }}', '{{ inscrito['turno'] }}', '{{ inscrito['seminarios'] }}')">Editar</a>
+                    <a href="/eliminar/{{ inscrito['id'] }}">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Modal de edición -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeModal()" style="cursor:pointer; float:right;">&times;</span>
+            <h2>Editar Inscrito</h2>
+            <form id="editForm" method="POST" action="/editar" onsubmit="setEditFormAction(event)">
+                <input type="hidden" id="editId" name="id">
+                <label>Fecha:</label>
+                <input type="date" id="editFecha" name="fecha" required>
+                <label>Nombre:</label>
+                <input type="text" id="editNombre" name="nombre" required>
+                <label>Apellidos:</label>
+                <input type="text" id="editApellidos" name="apellidos" required>
+                <label>Turno:</label>
+                <label><input type="radio" name="turno" value="mañana"> Mañana</label>
+                <label><input type="radio" name="turno" value="tarde"> Tarde</label>
+                <label><input type="radio" name="turno" value="noche"> Noche</label>
+                <label>Seminarios:</label>
+                <label><input type="checkbox" name="seminarios" value="Inteligencia Artificial"> Inteligencia Artificial</label>
+                <label><input type="checkbox" name="seminarios" value="Machine Learning"> Machine Learning</label>
+                <label><input type="checkbox" name="seminarios" value="Simulación con Arena"> Simulación con Arena</label>
+                <label><input type="checkbox" name="seminarios" value="Robótica Educativa"> Robótica Educativa</label>
+                <button type="submit">Guardar Cambios</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <script>
+        function showEditModal(id, fecha, nombre, apellidos, turno, seminarios) {
+            document.getElementById("editId").value = id;
+            document.getElementById("editFecha").value = fecha;
+            document.getElementById("editNombre").value = nombre;
+            document.getElementById("editApellidos").value = apellidos;
+
+            const turnos = document.getElementsByName("turno");
+            for (const turnoInput of turnos) {
+                if (turnoInput.value === turno) {
+                    turnoInput.checked = true;
+                }
+            }
+
+            const seminarioOptions = document.getElementsByName("seminarios");
+            for (const seminarioInput of seminarioOptions) {
+                seminarioInput.checked = seminarios.includes(seminarioInput.value);
+            }
+
+            document.getElementById("editForm").action = `/editar/${id}`;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
